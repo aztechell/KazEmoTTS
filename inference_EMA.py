@@ -10,6 +10,8 @@ from model import GradTTSWithEmo
 import utils_data as utils
 from attrdict import AttrDict
 from models import Generator as HiFiGAN
+from pathlib import Path
+from datetime import datetime
 
 HIFIGAN_CONFIG = './configs/hifigan-config.json'
 HIFIGAN_CHECKPT = r'.\pre_trained\g_01720000'
@@ -69,13 +71,13 @@ if __name__ == '__main__':
         audio = audio.detach().cpu().numpy().astype('int16')
         audio = AudioSegment(audio.data, frame_rate=22050, sample_width=2, channels=1)
 
-        from pathlib import Path
-
         out_dir = Path(args.generated_path)
         out_dir.mkdir(parents=True, exist_ok=True)
 
         spk = speakers[int(line.split("|")[2])]
-        fname = f"{emos[emo_i]}_{spk}.wav"
-        audio.export(str(out_dir / fname), format="wav")
+        ts = datetime.now().strftime("%Y%m%d-%H%M%S")
+        fname = f"{emos[emo_i]}_{spk}_{ts}.mp3"
+        audio.export(str(out_dir / fname), format="mp3", bitrate="192k")
+
         del y_enc, y_dec, attn, audio
         torch.cuda.empty_cache()
