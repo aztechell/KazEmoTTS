@@ -2,7 +2,6 @@ import json
 import numpy as np
 import torch
 from pydub import AudioSegment
-import utils_data
 import re
 from num2words import num2words
 from text import convert_text
@@ -21,8 +20,8 @@ if __name__ == '__main__':
     device = torch.device('cpu' if not torch.cuda.is_available() else "cuda")
     ckpt = args.model
     model = GradTTSWithEmo(**hps.model).to(device)
-    logger = utils_data.get_logger(hps.model_dir, "inference.log")
-    utils_data.load_checkpoint(ckpt, model, None)
+    logger = utils.get_logger(hps.model_dir, "inference.log")
+    utils.load_checkpoint(ckpt, model, None)
     _ = model.cuda().eval()
 
     print('Initializing HiFi-GAN...')

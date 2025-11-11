@@ -1,9 +1,4 @@
-import math
-import random
-
-import torch
-
-from model import monotonic_align
+import math, random, torch
 from model.base import BaseModule
 from model.text_encoder import TextEncoder
 from model.diffusion import Diffusion
@@ -305,6 +300,8 @@ class GradTTSWithEmo(BaseModule):
             use_gt_dur: bool
             durs: gt duration
         """
+        from model import monotonic_align
+
         x, x_lengths, y, y_lengths = self.relocate_input([x, x_lengths, y, y_lengths])  # y: B, 80, L
 
         spk = self.spk_emb(spk)
@@ -486,6 +483,8 @@ class GradTTSXvector(BaseModule):
             use_gt_dur: bool
             durs: gt duration
         """
+        from model import monotonic_align
+
         x, x_lengths, y, y_lengths = self.relocate_input([x, x_lengths, y, y_lengths])
 
         spk = self.xvector_proj(spk)  # NOTE: use x-vectors instead of speaker embedding
